@@ -1,0 +1,48 @@
+school_homepage:
+    path:     /
+    defaults: { _controller: SchoolBundle:App:index }
+
+school_students:
+    path:     /students
+    defaults: { _controller: SchoolBundle:Scolarship:students }
+
+school_student_create:
+    path:     /student/create
+    defaults: { _controller: SchoolBundle:Scolarship:studentManage }
+
+school_student_update:
+    path:     /student/update/{id}
+    defaults: { _controller: SchoolBundle:Scolarship:studentManage }
+    requirements:
+        id: \d+
+
+school_student:
+    path:     /student/{id}
+    defaults: { _controller: SchoolBundle:Scolarship:student }
+    requirements:
+        id: \d+
+
+
+school_borrows:
+    path:     /borrows
+    defaults: { _controller: SchoolBundle:Library:borrows }
+
+school_borrows:
+    path:     /borrow/{id}
+    defaults: { _controller: SchoolBundle:Library:borrow }
+    requirements:
+        id: \d+
+
+
+
+school_setting_manage:
+    path:     /manage/{entity}
+    defaults: { _controller: SchoolBundle:Manager:manage }
+
+school_setting_manage_update:
+    path:     /manage/{entity}/{id}
+    defaults: { _controller: SchoolBundle:Manager:manage }
+
+school_setting_delete:
+    path:     /delete/{entity}/{id}
+    defaults: { _controller: SchoolBundle:Manager:delete }

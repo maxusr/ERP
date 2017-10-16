@@ -1,0 +1,23 @@
+core_setting_home:
+    path:     /
+    defaults: { _controller: CoreBundle:Setting:index }
+
+core_setting_manage:
+    path:     /manage/{entity}
+    defaults: { _controller: CoreBundle:Setting:manage }
+
+core_setting_manage_update:
+    path:     /manage/{entity}/{id}
+    defaults: { _controller: CoreBundle:Setting:manage }
+
+core_setting_salaire:
+    path:     /salaire
+    defaults: { _controller: CoreBundle:Setting:salaire }
+
+core_setting_profil:
+    path:     /profil/{entity}
+    defaults: { _controller: CoreBundle:Setting:profil }
+
+core_setting_delete:
+    path:     /delete/{type}/{id}
+    defaults: { _controller: CoreBundle:Setting:delete }

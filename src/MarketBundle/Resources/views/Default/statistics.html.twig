@@ -1,0 +1,186 @@
+{% extends "MarketBundle:App:base.html.twig" %} 
+{% block title %} Statistiques | {{ parent() }}{% endblock %} 
+{% block main %}
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Ventes</h2>
+            </div>
+            <div class="col-md-6">
+                <div id="canvas-holder-3">
+                    <canvas id="chart-area-saling"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Commandes</h2>
+            </div>
+            <div class="col-md-6">
+                <div id="canvas-holder-1">
+                    <canvas id="chart-area-shipping"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="canvas-holder-2">
+                    <canvas id="chart-area-billing"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('assets/js/plugins/chart/Chart.bundle.min.js') }}" type="text/javascript"></script>
+    <script>
+
+        var configSaling = {
+            type: 'line',
+            data: {
+                labels: ["{{salings|keys|join('", "')}}"],
+                datasets: [{
+                    label: "Evolution",
+                    data: [{{salings|join(', ')}}],
+                }]
+            },
+            options: {
+                responsive: true,
+                title:{
+                    display: false,
+                    text:'Line Chart | Vente'
+                },
+                tooltips: {
+                    mode: 'label',
+                    callbacks: {
+                        // beforeTitle: function() {
+                        //     return '...beforeTitle';
+                        // },
+                        // afterTitle: function() {
+                        //     return '...afterTitle';
+                        // },
+                        // beforeBody: function() {
+                        //     return '...beforeBody';
+                        // },
+                        // afterBody: function() {
+                        //     return '...afterBody';
+                        // },
+                        // beforeFooter: function() {
+                        //     return '...beforeFooter';
+                        // },
+                        // footer: function() {
+                        //     return 'Footer';
+                        // },
+                        // afterFooter: function() {
+                        //     return '...afterFooter';
+                        // },
+                    }
+                },
+                hover: {
+                    mode: 'dataset'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            show: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            show: true,
+                            labelString: 'Quantité'
+                        },
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: {{salings|length}},
+                        }
+                    }]
+                }
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById("chart-area-saling").getContext("2d");
+            window.myLine = new Chart(ctx, configSaling);
+        };
+
+        var configShipping = {
+            data: {
+                datasets: [{
+                    data: [{{shippings|join(', ')}}],
+                    backgroundColor: [
+                        "#F7464A",
+                        "#46BFBD"
+                    ],
+                    label: '' // for legend
+                }],
+                labels: ["{{shippings|keys|join('", "')}}"]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Livraison'
+                },
+                scale: {
+                ticks: {
+                    beginAtZero: true
+                },
+                reverse: false
+                },
+                animation: {
+                    animateRotate: false,
+                    animateScale: true
+                }
+            }
+        };
+
+        var configBilling = {
+            data: {
+                datasets: [{
+                    data: [{{billings|join(', ')}}],
+                    backgroundColor: [
+                        "#F7464A",
+                        "#46BFBD"
+                    ],
+                    label: '' // for legend
+                }],
+                labels: ["{{billings|keys|join('", "')}}"]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Paiement'
+                },
+                scale: {
+                ticks: {
+                    beginAtZero: true
+                },
+                reverse: false
+                },
+                animation: {
+                    animateRotate: false,
+                    animateScale: true
+                }
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById("chart-area-shipping");
+            window.myPolarShipArea = Chart.PolarArea(ctx, configShipping);
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById("chart-area-billing");
+            window.myPolarBillArea = Chart.PolarArea(ctx, configBilling);
+        };
+    </script>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h3 class="text-center">Tous les employés</h3>
+    <hr/>
+    <div class="row" id="folders">
+        {% for user in actifs %}
+        <div class="col-md-3 col-sm-4">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="{{asset('assets/images/banner.jpg')}}" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="{{user.photo is not null ? asset(user.photo.getWebPath()) : asset('assets/images/logo2.png')}}" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <a href="{{path('core_carriere_one', {'id': user.id})}}">
+                                    <h3 class="name">{{user.longname}}</h3> {% if user.lastEchelon() is not null and user.lastEchelon() and user.lastEchelon().echelon is not null %}
+                                    <p class="profession">{{user.lastEchelon().echelon.designation}}<br/><small>Depuis {{user.lastEchelon().dateReadable()}}</small></p>{% endif %}
+                                </a>
+                                <h5>Congés</h5>
+                                <h5><small>{% if user.congeRestant() == 0 %}Déjà pris{% else %}{{user.congeRestant()}} Jours restants {% endif %}</small></h5>
+                                <h5>Sanctions</h5>
+                                <h5><small>{% if user.sanctions.isEmpty() == 0 %}Aucune sanction{% else %}{{user.sanctions|length}} Sanctions déjà{% endif %}</small></h5>
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple" onclick="rotateCard(this)">
+                                            <i class="fa fa-mail-forward"></i> Plus d'informations'
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h4 class="motto">Plus sur {{user.longname}}</h4>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4>Compétences</h4>
+                                <p>{{user.competence}}</p>
+                                <h4>Contact</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o fa-fw"></i>&nbsp;{{user.email}}</li>
+                                    <li><i class="fa fa-phone fa-fw"></i>&nbsp;{{user.telephone}}</li>
+                                    <li><i class="fa fa-map-marker fa-fw"></i>&nbsp;{{user.domicile}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-simple" rel="tooltip" title="Retour" onclick="rotateCard(this)">
+                                        <i class="fa fa-reply"></i> Retour
+                                    </button>
+                            <a href="{{path('core_carriere_one', {'id': user.id})}}" class="btn btn-simple pull-right" rel="tooltip" title="Afficher le compte">
+                                        Afficher <i class="fa fa-send"></i>
+                                    </a>
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        {% endfor %}
+
+    </div>
+    <div class="row" id="folders">
+        <h3>Contrats presque à terme</h3>
+        {% for user in users %}
+        <div class="col-sm-3 col-xs-4">
+            <a data-toggle="tooltip" title="{{user.longname}}" href="{{path('core_carriere_one', {'id': user.id})}}" class="text-aqua file bg-blue col-lg-12">
+                <i class="fa fa-user fa-2x"></i><br/>
+                <small class="text-white">{{user.longname}}</small> {% if user.contrat is not null %}
+                <h5>Contrat {{user.contrat.type|upper}} du {{user.contrat.debutReadable()}} au {{user.contrat.finReadable()}} ({{user.contrat.duree()}} Jours)</h5>
+                {% endif %}
+            </a>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <p class="text-center">Aucun contrat à terme</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <h3>Employés inactifs</h3>
+        {% for user in inactifs %}
+        <div class="col-md-3 col-sm-4">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="{{asset('assets/images/banner.jpg')}}" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="{{asset(user.photo.getWebPath())}}" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <a href="{{path('core_carriere_one', {'id': user.id})}}">
+                                    <h3 class="name">{{user.longname}}</h3> {% if user.lastEchelon() is not null and user.lastEchelon() and user.lastEchelon().echelon is not null %}
+                                    <p class="profession">{{user.lastEchelon().echelon.designation}}<br/><small>Depuis {{user.lastEchelon().dateReadable()}}</small></p>{% endif %}
+                                </a>
+                                <h5>Congés</h5>
+                                <h5><small>{% if user.congeRestant() == 0 %}Déjà pris{% else %}{{user.congeRestant()}} Jours restants {% endif %}</small></h5>
+                                <h5>Sanctions</h5>
+                                <h5><small>{% if user.sanctions.isEmpty() == 0 %}Aucune sanction{% else %}{{user.sanctions|length}} Sanctions déjà{% endif %}</small></h5>
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple" onclick="rotateCard(this)">
+                                            <i class="fa fa-mail-forward"></i> Plus d'informations'
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h4 class="motto">Plus sur {{user.longname}}</h4>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4>Compétences</h4>
+                                <p>{{user.competence}}</p>
+                                <h4>Contact</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o fa-fw"></i>&nbsp;{{user.email}}</li>
+                                    <li><i class="fa fa-phone fa-fw"></i>&nbsp;{{user.telephone}}</li>
+                                    <li><i class="fa fa-map-marker fa-fw"></i>&nbsp;{{user.domicile}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-simple" rel="tooltip" title="Retour" onclick="rotateCard(this)">
+                                        <i class="fa fa-reply"></i> Retour
+                                    </button>
+                            <a href="{{path('core_carriere_one', {'id': user.id})}}" class="btn btn-simple pull-right" rel="tooltip" title="Afficher le compte">
+                                        Afficher <i class="fa fa-send"></i>
+                                    </a>
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

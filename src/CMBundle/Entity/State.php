@@ -1,0 +1,237 @@
+<?php
+
+namespace CMBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * State
+ *
+ * @ORM\Table(name="state")
+ * @ORM\Entity(repositoryClass="CMBundle\Repository\StateRepository")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class State
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="insertedAt", type="datetime")
+     */
+    private $insertedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="note", type="text", nullable=true)
+     */
+    private $note;
+
+    /**
+     * @var Product
+     *
+     * @ORM\ManyToOne(targetEntity="Product", inversedBy="states")
+     */
+    private $product;
+
+    /**
+     * @var CoreBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="CoreBundle\Entity\User")
+     */
+    private $insertedBy;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isAvailable", type="boolean", nullable=true)
+     */
+    private $isAvailable;
+
+
+    public function __construct() {
+        $this->insertedAt = new \DateTime;
+        $this->isAvailable = true;
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return State
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set insertedAt
+     *
+     * @param \DateTime $insertedAt
+     *
+     * @return State
+     */
+    public function setInsertedAt($insertedAt)
+    {
+        $this->insertedAt = $insertedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get insertedAt
+     *
+     * @return \DateTime
+     */
+    public function getInsertedAt()
+    {
+        return $this->insertedAt;
+    }
+
+    /**
+     * Set note
+     *
+     * @param string $note
+     *
+     * @return State
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get note
+     *
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \CMBundle\Entity\Product $product
+     *
+     * @return State
+     */
+    public function setProduct(\CMBundle\Entity\Product $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \CMBundle\Entity\Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * Set insertedBy
+     *
+     * @param \CoreBundle\Entity\User $insertedBy
+     *
+     * @return State
+     */
+    public function setInsertedBy(\CoreBundle\Entity\User $insertedBy = null)
+    {
+        $this->insertedBy = $insertedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get insertedBy
+     *
+     * @return \CoreBundle\Entity\User
+     */
+    public function getInsertedBy()
+    {
+        return $this->insertedBy;
+    }
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function preMake() {
+        if(!is_null($this->getProduct())) {
+            $this->product->setIsAvailable = $this->isAvailable;
+        }
+    }
+
+    /**
+     * Set isAvailable
+     *
+     * @param boolean $isAvailable
+     *
+     * @return State
+     */
+    public function setIsAvailable($isAvailable)
+    {
+        $this->isAvailable = $isAvailable;
+
+        return $this;
+    }
+
+    /**
+     * Get isAvailable
+     *
+     * @return boolean
+     */
+    public function getIsAvailable()
+    {
+        return $this->isAvailable;
+    }
+}

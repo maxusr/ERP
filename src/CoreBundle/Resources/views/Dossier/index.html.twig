@@ -1,0 +1,128 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <br/>
+    <div class="row">
+        <div class="col-sm-4 col-md-3">
+            {% if dossiers is not null %} {% set dossier = dossiers|first %} {% if dossier is not null and dossier %}
+            <div class="row text-center">
+                <div class="lightslider">
+                    <div id="carousel-file" class="carousel slide carousel-show" data-ride="carousel">
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+                            {% for document in dossier.documents if document.isImage() %}
+                            <div class="{% if loop.index == 1%}active{% endif %} item">
+                                <p class="text-center"><img src="{{asset(document.getWebPath())}}" alt="{{document.name}}" class="file-image img-responsive" style="max-height: 250px;" /></p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control left" href="#carousel-file" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="carousel-control right" href="#carousel-file" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row">
+                <table class="table table-condensed">
+                    <caption>
+                        <h4>Informations Dossier</h4>
+                    </caption>
+                    <tr>
+                        <th>Nom:</th>
+                        <td ng-bind="dossier.name">{{dossier.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Numéro:</th>
+                        <td ng-bind="dossier.numero">{{dossier.numero}}</td>
+                    </tr>
+                    <tr>
+                        <th>Type:</th>
+                        <td ng-bind="dossier.type">{{dossier.typeReadable()}}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Enreg:</th>
+                        <td ng-bind="dossier.date">{{dossier.date|date('d/m/Y')}}</td>
+                    </tr>
+                    {% if dossier.saver is not null %}
+                    <tr>
+                        <th>Enregistré par:</th>
+                        <td ng-bind="dossier.saver.longname">{{dossier.saver.longname}}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Nombre de pièces jointes:</th>
+                        <td ng-bind="dossier.documents.length">{{dossier.documents|length}}</td>
+                    </tr>
+                </table>
+                <table class="table table-condensed">
+                    {% if dossier.personne is not null %}
+                    <caption>
+                        <h4>Informations de la personne</h4>
+                    </caption>
+                    <tr>
+                        <th>Nom:</th>
+                        <td ng-bind="dossier.personne.longname">{{dossier.personne.longname}}</td>
+                    </tr>
+                    <tr>
+                        <th>N° <span ng-bind="dossier.personne.identifiantType">{{dossier.personne.identifiantType|upper}}</span:</th>
+                        <td ng-bind="dossier.personne.identifiant">{{dossier.personne.identifiant}}</td>
+                    </tr>
+                    <tr>
+                        <th>E-mail:</th>
+                        <td ng-bind="dossier.personne.email">{{dossier.personne.email}}</td>
+                    </tr>
+                    <tr>
+                        <th>Téléphone:</th>
+                        <td ng-bind="dossier.personne.telephone">{{dossier.personne.telephone}}</td>
+                    </tr>
+                    {% else %}
+                    <caption>
+                        <h4>Aucun personne enregistré.</h4></caption>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="row">
+                {% if app.user.can('ACCESS_DOSSIER') %}
+                    <a href="{{path('core_dossier_one', {'id': dossier.id})}}" class="btn btn-primary btn-block"><i class="fa fa-eye"></i> Afficher le dossier</a> 
+                {% endif %}
+                {% if app.user.can('DELETE_DOSSIER') %}
+                    <a href="{{path('core_dossier_delete', {'id': dossier.id})}}" class="btn btn-danger btn-block"><i class="fa fa-remove"></i> Supprimer dossier</a> 
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+        <div class="col-sm-8 col-md-9">
+            <div class="col-lg-12">
+                <div class="col-md-8 col-md-offset-2">
+                    <form method="get" class="form-search" id="form-search">
+                        <div class="input-group">
+                            <input ng-model="search" type="search" class="form-control input-lg" id="input-search" name="s" placeholder="Rechercher un dossier par nom ou numero..." required/>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-lg"><i class="fa fa-search fa-lg"></i></button>
+                            </span>
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <h3 class="text-center">Vos Dossiers</h3>
+        <hr/>
+        <div class="row" id="folders">
+            {% for dossier in dossiers %}
+            <div class="col-sm-3 col-xs-4">
+                <a data-toggle="tooltip" title="{{dossier.name}}" href="{{path('core_dossier_one', {'id':dossier.id})}}" class="text-aqua file bg-blue col-lg-12">
+                    <i class="fa fa-folder fa-2x"></i><br/>
+                    <small class="text-white">{{dossier.name}}<br/>{{dossier.typeReadable()}}</small>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+#messages {
+  height: 450px;
+  padding-top: 50px;
+  overflow: auto;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  margin-top: 20px;
+}
+
+.sender {
+  text-align: right;
+}
+
+.users {
+  margin: 5px;
+}

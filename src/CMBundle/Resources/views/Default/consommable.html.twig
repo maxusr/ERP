@@ -1,0 +1,62 @@
+{% extends "CMBundle:App:base.html.twig" %} {% block title %} {{name}} | {{ parent() }} {% endblock title %} {% block main %}
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>{{name}}s</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form action="" method="get" class="form-inline pull-right">
+                <div class="input-group">
+                    <input type="text" autocomplete="off" value="{{app.request.query.get('s')}}" name="s" class="form-control datepicker" required placeholder="Nom du matériel..." />
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn btn-success" value="rechercher" />
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        {% for entity in entities %}
+        <div class="col-md-3 col-sm-4">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">{{ entity.name }}</h3>
+                                <p class="profession">Quantité: {{ entity.quantity }}</p>
+                                <p class="profession">Reférence: {{ entity.reference ? entity.reference : 'Non fournie' }}</p>
+                                {% set par = entity.saver %} {% if par is not null %}
+                                <h4>Enregistré par</h4>
+                                <h4><small>{{ par.calling() }}</small></h4>
+                                <h4><small><b>CNI: </b>{{ par.cni ? par.cni : 'Non fourni' }}</small></h4>
+                                <h4><small><b>Téléphone: </b>{{ par.telephone ? par.telephone : 'Non fourni' }}</small></h4>
+                                {% endif %}
+                            </div>
+                            {% if entity.saver.isEqualTo(app.user) %}
+                            <div class="footer">
+                                <span class="btn btn-simple">Le {{entity.insertedAt|date('d-m-Y à H:i:s')}}</span>
+                                <a href="{{path('cm_setting_delete', {'id': entity.id, 'type': 'product'})}}" class="btn btn-simple confirm" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" rel="tooltip" title="Supprimer">
+                                            Supprimer <i class="fa fa-remove"></i>
+                                        </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        {% else %}
+        <div class="well">
+            <p class="text-center">Aucun {{name}} enregistré</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %} {% block stylesheets %} {{ parent() }} {% endblock %} {% block title %}{{ parent() }}{% endblock title %} {% block body %}
+
+<nav class="navbar navbar-static-top header">
+    <div class="wrapper">
+        <div class="nav nav-top navbar-default nav-background">
+            <div class="nav navbar-nav">
+                <p>
+                    <!--<img src="./assets/images/logo.png" alt="logo excellia sarl" />-->
+                    <!-- <div class="nav-header-1">Cabinet Excellia Sarl</div> -->
+                    <div class="nav-header-2">Gestion Comptabilité Matière</div>
+                </p>
+            </div>
+        </div>
+        <div class="nav-bottom col-lg-12" id="navbar-collapse-1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li title="Accueil" class="{% if app.request.attributes.get('_route') == 'cm_homepage' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('cm_homepage')}}" data-toggle="modal"><i class="fa fa-home fa-lg"></i></a></li>
+                        {#
+                        <li title="Vos détails" data-toggle="tooltip"><a href="#"><i class="fa fa-list"></i></a></li>
+                        #}
+                        <li title="Vous" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    {{app.user.calling}}
+                                </li>
+                                <li><a href="#portfolioProfil" data-toggle="modal"><span class="fa fa-eye fa-fw"></span> Afficher</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('core_logout')}}"><span class="fa fa-sign-out fa-fw"></span> Déconnexion</a></li>
+                            </ul>
+                        </li>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SETTING') %}
+                        <li title="Patrimoine" class="{% if app.request.attributes.get('_route') == 'cm_setting' %}active{% endif %}" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i>&nbsp;Patrimoine</a>
+
+                            <ul class="dropdown-menu">
+                                <div class="dropdown-header">Gérer</div>
+                                <li><a href="{{path('cm_setting_manage', {'entity': 'category'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Catégorie</a></li>
+                                <li><a href="{{path('cm_setting_manage', {'entity': 'product'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Matériel</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li title="Etat du matériel" class="{% if app.request.attributes.get('_route') == 'cm_product_states' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('cm_product_states')}}" data-toggle="modal">Etat du matériel</a></li>
+                        <li class="{% if app.request.attributes.get('_route') == 'cm_product_consommable' or app.request.attributes.get('_route') == 'cm_all' %}active{% endif %}" title="Inventaire Général de Base" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">IGB</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('cm_product_consommable')}}"><i class="fa fa-list fa-fw"></i> Consommables</a></li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Gestion des stocks</li>
+                                <li><a href="{{path('cm_all', {'entity': 'input'})}}"><i class="fa fa-list fa-fw"></i> Tous les entrées</a></li>
+                                <li><a href="{{path('cm_all', {'entity': 'output'})}}"><i class="fa fa-list fa-fw"></i> Tous les sorties</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('cm_product_inventaire')}}"><i class="fa fa-list fa-fw"></i> Inventaire</a></li>
+                            </ul>
+                        </li>
+                        {# {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SOLDE') %}
+                        <li title="Soldes" rel="tooltip"><a href="#">SOLDES</a></li>
+                        {% endif %} {% if app.user.can('ACCESS_MESSAGERIE') %}
+                        <li id="launch-discussion" data-number-url="#" title="Envoyer un message" data-toggle="tooltip"><a href="#" data-toggle="modal"><small class="notifier text-navy"></small> <i class="fa fa-comments-o fa-lg"></i></a></li>
+                        {% endif %} #}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="container" id="content">
+    {% block main %} {% endblock main %} {{ include('modals/primitive.html.twig', {}) }}
+</main>
+<footer>
+    <div class="col-lg-12">
+        <p class="text-center">Copyright &copy; 2016 EPAB Designed by Belinga Junior</p>
+    </div>
+</footer>
+<!-- /.login-box -->
+{% endblock body %}

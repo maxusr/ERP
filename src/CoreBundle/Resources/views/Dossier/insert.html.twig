@@ -1,0 +1,97 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12" ng-controller="DossierController">
+    <h2>Enregistrer un nouveau dossier</h2>
+    <hr/>
+    <form class="form text-left" id="formDossier" method="post" action="" enctype="multipart/form-data">
+        <div class="col-md-4">
+            <fieldset>
+                <legend>Informations du dossier</legend>
+                <div class="form-group">
+                    {{form_widget(formDossier.name)}} {{form_errors(formDossier.name)}}
+                </div>
+                <div class="form-group">
+                    {{form_widget(formDossier.numero)}} {{form_errors(formDossier.numero)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formDossier.type)}} {{form_widget(formDossier.type)}} {{form_errors(formDossier.type)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formDossier.dateDepot)}} {{form_widget(formDossier.dateDepot)}} {{form_errors(formDossier.dateDepot)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formDossier.domaine)}} {{form_widget(formDossier.domaine)}} {{form_errors(formDossier.domaine)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formDossier.documents)}}
+                    <div class="col-lg-12">
+                        <button class="btn btn-primary btn-sm btn-block" id="film-vignette-hidder"><i class="fa fa-file-image-o"></i></button> {{form_widget(formDossier.documents)}}
+                    </div>
+                    <p class="text-maroon"><small><b>Note:</b> Sélection multiple. Maximum 8 fichiers supportés et 50 Mo maximum au total.</small></p>
+                    <hr/>
+
+                    <ul class="list-group" id="fileDetails">
+                    </ul>
+                    <div class="alert" id="resultUpload">
+                        {{form_errors(formDossier.documents)}}
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-md-8">
+            <fieldset>
+                <legend>Informations du concerné</legend>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{form_label(formDossier.personne.civility)}} {{form_widget(formDossier.personne.civility)}} {{form_errors(formDossier.personne.civility)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.name)}} {{form_errors(formDossier.personne.name)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.surname)}} {{form_errors(formDossier.personne.surname)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.dateNaissance)}} {{form_errors(formDossier.personne.dateNaissance)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.lieuNaissance)}} {{form_errors(formDossier.personne.lieuNaissance)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_label(formDossier.personne.regionOrigine)}} {{form_widget(formDossier.personne.regionOrigine)}} {{form_errors(formDossier.personne.regionOrigine)}}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{form_label(formDossier.personne.identifiantType)}} {{form_widget(formDossier.personne.identifiantType)}} {{form_errors(formDossier.personne.identifiantType)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.identifiant)}} {{form_errors(formDossier.personne.identifiant)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.telephone)}} {{form_errors(formDossier.personne.telephone)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.email)}} {{form_errors(formDossier.personne.email)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.competence)}} {{form_errors(formDossier.personne.competence)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formDossier.personne.description)}} {{form_errors(formDossier.personne.description)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_label(formDossier.personne.domaines)}} {{form_widget(formDossier.personne.domaines)}} {{form_errors(formDossier.personne.domaines)}}
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="form-group">
+            {{form_end(formDossier)}}
+            <button class="btn btn-success col-md-4 btn-lg" type="submit" id="submit"><i class="fa fa-user"></i> Ajouter</button>
+        </div>
+    </form>
+    <div class="clearfix"></div>
+</div>
+{% endblock %} {% block javascripts %} {{parent()}}
+<script src="{{ asset('assets/js/add.dossier.js') }}" type="text/javascript"></script>
+{% endblock %}

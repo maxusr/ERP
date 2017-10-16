@@ -1,0 +1,45 @@
+.navbar{
+	margin-bottom: 10px;
+	background-color: #ffe;
+    border-radius: 4px 4px;
+    position: relative;
+}
+.navbar ul{
+	padding: 0px;
+	list-style-type: none;
+
+}
+
+.navbar ul>li{
+	list-style-type: none;
+	float: left;
+
+}
+.navbar ul>li:hover{
+	background-color: #def;
+}
+
+.nav, .navbar-form, .navbar-header{
+	display: inline-block;
+	vertical-align: top;
+}
+.navbar-brand{
+	font-weight: bold;
+}
+.navbar-brand,.navbar-form, .nav li{
+	line-height: 60px;
+	margin-left: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.navbar-nav{
+	margin: 0px;
+}
+.navbar-default a{
+	color: #444;
+}
+.navbar-right{
+	position: absolute;
+	right: 0px;
+	margin-right: 10px;
+}

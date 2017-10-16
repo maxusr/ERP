@@ -1,0 +1,134 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h2>
+        <i class="fa fa-folder-open"></i> {{dossier.name}}
+        <span class="pull-right">
+			<a href="{{path('core_dossier_archive', {'id': dossier.id})}}" class="btn bg-blue confirm" data-confirm-message="Voulez-vous vraiment archiver ce dossier?"><i class="fa fa-file-archive-o"></i> {% if dossier.archive %}Restaurer{% else %}Archiver{% endif %}</a>
+            {% if not dossier.archive %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('UPDATE_DOSSIER') %}
+                    <a href="{{path('core_dossier_update', {'id': dossier.id})}}" class="btn btn-success"><i class="fa fa-edit"></i> Modifier</a>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('DELETE_DOSSIER') %}
+                    <a href="{{path('core_dossier_delete', {'id': dossier.id})}}" class="btn btn-danger confirm" data-confirm-message="Voulez-vous vraiment supprimer ce dossier?"><i class="fa fa-trash-o"></i> Supprimer</a>
+                {% endif %}
+            {% endif %}
+		</span>
+    </h2>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4 col-sm-5">
+            <ul class="list-group">
+                <li class="list-group-item bg-primary">
+                    <h4 class="list-group-item-header"><b>Numéro:</b></h4>
+                    <p class="list-group-item-text">{{dossier.numero}}</p>
+                </li>
+                <li class="list-group-item">
+                    <h4 class="list-group-item-header"><b>Date enregistrement:</b></h4>
+                    <p class="list-group-item-text"><i class="fa fa-calendar-o"></i> {{dossier.dateDepotReadable()}}</p>
+                </li>
+                <li class="list-group-item">
+                    <h4 class="list-group-item-header"><b>Type:</b></h4>
+                    <p class="list-group-item-text"><i class="fa fa-signal"></i> {{dossier.typeReadable()}}</p>
+                </li>
+                {% if dossier.saver is not null %}
+                <li class="list-group-item">
+                    <h4 class="list-group-item-header"><b>Enregistré par:</b></h4>
+                    <p class="list-group-item-text"><i class="fa fa-user"></i> {{dossier.saver.longname}}</p>
+                </li>
+                {% endif %} {% if dossier.domaine is not null %}
+                <li class="list-group-item">
+                    <h4 class="list-institution"><b>Domaine:</b></h4>
+                    <p class="list-group-item-text"><i class="fa fa-user"></i> {{dossier.domaine.name}}</p>
+                </li>
+                {% endif %}
+                <li class="list-group-item bg-dark">
+                    <h4 class="list-group-item-header"><b>{{dossier.documents|length}} documents insérés</b></h4>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-8 col-sm-7 clients-shower">
+            <ul class="list-group">
+                <li class="list-group-item bg-red">
+                    <h3 class="text-center"><b>Propriétaire</b></h3>
+                </li>
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="" class="btn btn-sm pull-right"><i class="fa fa-plus"></i> Engager</a>
+                                    <h4 class="list-group-item-header"><b>{{dossier.personne.longname}}</b></h4>
+                                </li>
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>{{dossier.personne.identifiantReadable()}}:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.identifiant}}</p>
+                                </li>
+                                {% if dossier.personne.email is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>E-mail:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.email}} </p>
+                                </li>
+                                {% endif %} {% if dossier.personne.telephone is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Téléphone:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.telephone}}</p>
+                                </li>
+                                {% endif %} {% if dossier.personne.dateNaissance is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Date de naissance:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.dateNaissanceReadable()}} ({{dossier.personne.age()}} ans) </p>
+                                </li>
+                                {% endif %} {% if dossier.personne.lieuNaissance is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Lieu de naissance:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.lieuNaissance}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group">
+                                {% endif %} {% if dossier.personne.regionOrigine is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Région d'origine:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.regionOrigine.name}}</p>
+                                </li>
+                                {% endif %} {% if dossier.personne.domaines is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Domaines:</b></h4>
+                                    <p class="list-group-item-text">
+                                        {% for domaine in dossier.personne.domaines %}
+                                        <span class="label label-primary">{{domaine.name}}</span> {% endfor %}
+                                    </p>
+                                </li>
+                                {% endif %} {% if dossier.personne.competence is not null %}
+                                <li class="list-group-item">
+                                    <h4 class="list-group-item-header"><b>Compétence:</b></h4>
+                                    <p class="list-group-item-text">{{dossier.personne.competence}}</p>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Pièces jointes</h3> {% for document in dossier.documents %}
+            <div class="col-md-3 col-sm-4 col-xs-6 text-center tile">
+                <figure>
+                    <i class="fa fa-5x fa-file-{{document.editeur()}}-o"></i>
+                    <figcaption>
+                        {{document.name}}
+                    </figcaption>
+                    <p class="">
+                        <a href="{{asset(document.getWebPath())}}" target="_blank" class="text-teal" data-toggle="tooltip" title="Télécharger"><i class="fa fa-cloud-download"></i></a>
+                    </p>
+                </figure>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

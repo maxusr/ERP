@@ -1,0 +1,91 @@
+<ul class="list-group">
+    {% for entity in entities %}
+    <li class="list-group-item">
+        <h4 class="list-group-item-title">
+            <button class="btn btn-default pull-right" data-placement="left" data-trigger="focus" data-html="true" data-toggle="popover" title="Attributs/Valeurs" data-content="
+            <ul class='list-group'>
+            {% for value in entity.attributeValues %}
+                <li class='list-group-item'>{{value.attribute.name}} - {{value.value}} - <a class='btn btn-link btn-danger confirm' data-confirm-message='Voulez-vous supprimer cette valeur?' href='{{path('market_setting_delete', {'id': value.id, 'type': 'productAttributeValue'})}}'>Suppr.</a></li>
+            {% else %}
+                <li class='list-group-item'>Aucun recap.</li>    
+            {% endfor %}
+            </ul>
+            ">Attr./Val.</button>
+            <button class="btn btn-default pull-right" data-placement="left" data-trigger="focus" data-html="true" data-toggle="popover" title="Recap. Ajout/Réduction" data-content="
+            <ul class='list-group'>
+            {% for quantity in entity.quantities %}
+                <li class='list-group-item'>{{quantity.actionReadable()}} - {{quantity.quantity}} - {{quantity.insertedAt|date('d/m/Y')}}</li>
+            {% else %}
+                <li class='list-group-item'>Aucun recap.</li>    
+            {% endfor %}
+            </ul>
+            ">Recap.</button>
+            {{entity.name}}
+            <br/><small>Produit: {{entity.product.name}}</small>
+            <br/><small>Quantité: {{entity.quantity}}</small>
+            <br/><small>Prix: {{entity.price}}</small>
+        </h4>
+        <div class="pull-right">
+            <span class="dropdown">
+                <button class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown">Ajout Attribut&nbsp;<span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="col-lg-12">
+                            
+                        <form action="" method="post">
+                            <input type="hidden" name="product" value="{{entity.id}}" required />
+                            <div class="form-group">
+                                <select class="form-control" name="attribute" required>
+                                    <option>-- Sélectionnez un attribut --</option>
+                                    {% for attribut in attributes %}
+                                    <option value="{{attribut.id}}">{{attribut.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="value" required placeholder="Valeur..."/>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-block btn-success" type="submit">Envoyer</button>
+                            </div>
+                        </form>
+                        </div>
+                    </li>
+                </ul>
+            </span>
+            <span class="dropdown">
+                <button class="dropdown-toggle btn btn-info btn-sm" data-toggle="dropdown">MAJ Quantité&nbsp;<span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="col-lg-12">
+                            
+                        <form action="" method="post">
+                            <input type="hidden" name="product" value="{{entity.id}}" required />
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="quantity" required placeholder="Quantité..."/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control datepicker" name="date" required placeholder="Date..."/>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="action" required>
+                                    <option>-- Sélectionnez une action --</option>
+                                    <option value="0">Réduire</option>
+                                    <option value="1">Ajouter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-block btn-success" type="submit">Envoyer</button>
+                            </div>
+                        </form>
+                        </div>
+                    </li>
+                </ul>
+            </span>
+            <a href="{{path('market_setting_manage_update', {'id': entity.id, 'entity': 'productVariant'})}}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Modifier</a>
+            <a href="{{path('market_setting_delete', {'id': entity.id, 'type': 'productVariant'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm btn btn-sm btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    {% endfor %}
+</ul>

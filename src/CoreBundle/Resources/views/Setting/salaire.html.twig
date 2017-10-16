@@ -1,0 +1,48 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h3 class="text-center">Tous les employés & Salaires</h3>
+    <hr/>
+    <div class="row" id="folders">
+        {% for employe in employes %}
+        <div class="col-md-3 col-sm-4">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="{{asset('assets/images/banner.jpg')}}" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="{{asset(employe.user.photo.getWebPath())}}" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <a href="{{path('core_carriere_one', {'id': employe.user.id})}}">
+                                    <h3 class="name">{{employe.user.longname}}</h3> {% if employe.user.lastEchelon() is not null and employe.user.lastEchelon() and employe.user.lastEchelon().echelon is not null %}
+                                    <p class="profession">{{employe.user.lastEchelon().echelon.designation}}<br/><small>Depuis {{employe.user.lastEchelon().dateReadable()}}</small></p>{% endif %}
+                                </a>
+                                <h5>Salaire Brut</h5>
+                                <h5><small>{{employe.sbrut}}</small></h5>
+                                <h5>Pénalités ({{employe.jpenalite}} Jours)</h5>
+                                <h5><small>{{employe.spenalite}}</small></h5>
+                                <h5>Taxe</h5>
+                                <h5><small>{{employe.staxe}}</small></h5>
+                                <h5><small>A payer avant {{employe.date}}</small></h5>
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple">
+                                            <b>Net: </b>{{employe.snet}}
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end front panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

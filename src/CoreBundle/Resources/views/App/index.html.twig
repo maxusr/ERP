@@ -1,0 +1,212 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Agenda</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="well">
+                <div class="row text-center">
+                    <div class="col-lg-12">
+                        <h2>Rappels</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 panel-group" id="accordion-rappel">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="accordion-rappel" href="#collapse-rappel-form">Formulaire de Rappel</a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="collapse-rappel-form">
+                                <div class="panel-body">
+                                    <form action="" method="post">
+                                        <div class="form-group">
+                                            {{form_widget(rappelForm.content)}} {{form_errors(rappelForm.content)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_widget(rappelForm.dateRappel)}} {{form_errors(rappelForm.dateRappel)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_widget(rappelForm.heureRappel)}} {{form_errors(rappelForm.heureRappel)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_widget(rappelForm.avant)}} {{form_errors(rappelForm.avant)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_end(rappelForm)}}
+                                            <button class="btn btn-success btn-block" type="submit">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="accordion-rappel" href="#collapse-rappel-list">Vos rappels</a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="collapse-rappel-list">
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        {% for rappel in rappels if rappel.isShowable() %}
+                                        <li class="list-group-item bg-primary note">
+                                            <p>{{rappel.content}}</p>
+                                            <a href="{{path('core_rappel_vu', {'id': rappel.id})}}" data-toggle="tooltip" title="Vu" class="pull-right close"><i class="fa fa-eye-slash"></i></a>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="well">
+                <div class="row text-center">
+                    <div class="col-lg-12">
+                        <h2>Notes</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 panel-group" id="accordion-note">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-note" href="#collapse-note-form">Formulaire de Note</a></h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="collapse-note-form">
+                                <div class="panel-body">
+                                    <form action="" method="post">
+                                        <div class="form-group">
+                                            {{form_widget(noteForm.title)}} {{form_errors(noteForm.title)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_widget(noteForm.content)}} {{form_errors(noteForm.content)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_widget(noteForm.receivers)}} {{form_errors(noteForm.receivers)}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{form_end(noteForm)}}
+                                            <button class="btn btn-success btn-block" type="submit">Ajouter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-note" href="#collapse-note-list">Vos notes</a></h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="collapse-note-list">
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        {% for note in notes %}
+                                        <li class="list-group-item bg-blue note">
+                                            <a href="{{path('core_note_vu', {'id': note.id})}}" data-toggle="tooltip" title="Vu" class="pull-right close"><i class="fa fa-eye-slash"></i></a>
+                                            <h4><b>{{note.title}}</b></h4>
+                                            <p>{{note.content}}</p>
+                                            <small class="pull-right text-muted">par {{note.sender.longname}}</small>
+                                            <div class="clearfix"></div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="well">
+                <div class="row text-center">
+                    <div class="col-lg-12">
+                        <h2>Rendez-vous</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 panel-group" id="accordion-rdv">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-rdv" href="#collapse-rdv-form">Formulaire de RDV</a></h4>
+                            </div>
+                            <div class="panel-collapse collapse" id="collapse-rdv-form">
+                                <div class="panel-body">
+                                    <form action="" method="post">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{form_widget(rdvForm.content)}} {{form_errors(rdvForm.content)}}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    {{form_widget(rdvForm.dateRappel)}} {{form_errors(rdvForm.dateRappel)}}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{form_widget(rdvForm.heureRappel)}} {{form_errors(rdvForm.heureRappel)}}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{form_widget(rdvForm.avant)}} {{form_errors(rdvForm.avant)}}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{form_end(rdvForm)}}
+                                                    <button class="btn btn-success btn-block" type="submit">Ajouter</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="accordion-rdv" href="#collapse-rdv-list">Vos RDV</a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse in" id="collapse-rdv-list">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th data-attribute="content">Descriptif</th>
+                                                    <th data-attribute="date">Jour</th>
+                                                    <th data-attribute="time">Heure</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rdv in rdvs %}
+                                                <tr>
+                                                    <td>{{rdv.content}} {% if rdv.isPassed() %} &nbsp;&nbsp;
+                                                        <span class="label label-primary">Passé</span> {% endif %}
+                                                    </td>
+                                                    <td>{{rdv.jour()}}</td>
+                                                    <td>{{rdv.heure()}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

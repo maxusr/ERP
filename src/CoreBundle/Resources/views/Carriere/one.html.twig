@@ -1,0 +1,406 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h2>
+        <i class="fa fa-user"></i> {{user.longname}}
+        <span class="pull-right">
+            {% if user.email is not null %}
+			<a href="mailto:{{user.email}}" class="btn bg-blue"><i class="fa fa-envelope-o"></i> Envoyer un mail</a>
+            {% endif %}
+            {% if app.user.can('UPDATE_USER') %}
+			<a href="{{path('core_carriere_active', {'id': user.id})}}" class="btn btn-danger">{% if user.active %}<i class="fa fa-remove"></i> Désactiver{% else %}<i class="fa fa-thumb-up"></i> Activer{% endif %}</a>
+			<a href="{{path('core_carriere_delete', {'id': user.id})}}" class="btn btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+            {% endif %}
+		</span>
+    </h2>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4 col-sm-5">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="{{asset('assets/images/banner.jpg')}}" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="{{user.photo is not null ? asset(user.photo.getWebPath()) : asset('assets/images/logo2.png')}}" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <a href="{{path('core_carriere_one', {'id': user.id})}}">
+                                    <h3 class="name">{{user.longname}}</h3> {% if user.lastEchelon() is not null and user.lastEchelon() and user.lastEchelon().echelon is not null %}
+                                    <p class="profession">{{user.lastEchelon().echelon.designation}}<br/><small>Depuis {{user.lastEchelon().dateReadable()}}</small></p>{% endif %}
+                                </a>
+                                <h5>Congés</h5>
+                                <h5><small>{% if user.congeRestant() == 0 %}Déjà pris{% else %}{{user.congeRestant()}} Jours restants {% endif %}</small></h5> {% if user.contrat is not null %}
+                                <h5>Contrat {{user.contrat.type|upper}} du {{user.contrat.debutReadable()}} au {{user.contrat.finReadable()}} ({{user.contrat.duree()}} Jours)</h5> {% endif %}
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple" onclick="rotateCard(this)">
+                                            <i class="fa fa-mail-forward"></i> Plus d'informations'
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h4 class="motto">Plus sur {{user.longname}}</h4>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4>Compétences</h4>
+                                <p>{{user.competence}}</p>
+                                <h4>Contact</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o fa-fw"></i>&nbsp;{{user.email}}</li>
+                                    <li><i class="fa fa-phone fa-fw"></i>&nbsp;{{user.telephone}}</li>
+                                    <li><i class="fa fa-map-marker fa-fw"></i>&nbsp;{{user.domicile}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-simple" rel="tooltip" title="Retour" onclick="rotateCard(this)">
+                                        <i class="fa fa-reply"></i> Retour
+                                    </button>
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        <div class="col-md-8 col-sm-7">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-group">
+                        <div class="list-group-item bg-blue">
+                            <h3>Poste Actuel<br/><small>{% if user.lastEchelon() and user.lastEchelon().echelon is not null %}{{user.lastEchelon().echelon.poste.name}} &middot; {{user.lastEchelon().echelon.designation}}{% else %}Aucun poste{% endif %}</small></h3>
+                        </div>
+
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_ECHELON') %}
+                        <div class="list-group-item">
+                            <fieldset>
+                                <legend>
+                                    <h4>Nouveau poste?</h4>
+                                </legend>
+                                <form action="" method="post">
+                                    <div class="form-group">
+                                        {{form_widget(formUserEchelon.details)}} {{form_errors(formUserEchelon.details)}}
+                                    </div>
+                                    <div class="form-group">
+                                        {{form_label(formUserEchelon.echelon)}} {{form_widget(formUserEchelon.echelon)}} {{form_errors(formUserEchelon.echelon)}}
+                                    </div>
+                                    <div class="form-group">
+                                        {{form_label(formUserEchelon.date)}} {{form_widget(formUserEchelon.date)}} {{form_errors(formUserEchelon.date)}}
+                                    </div>
+                                    <div class="form-group">
+                                        {{form_end(formUserEchelon)}}
+                                        <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Echelonner</button>
+                                    </div>
+                                </form>
+                            </fieldset>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Derniers postes</h3>
+                    <div class="list-group">
+                        {% for echelon in user.userEchelons if echelon is not null and echelon.echelon is not null %}
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-title">
+                                <b>{{echelon.echelon.designation}}</b><br/>
+                                <small>A Partir du {{echelon.dateReadable()}}</small>
+                            </h5>
+                        </div>
+                        {% else %}
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-title">
+                                Aucun pour l'instant
+                            </h5>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_CONTRAT') %}
+                    <div class="list-group">
+                        <div class="list-group-item bg-blue">
+                            <h4>Nouveau Contrat</h4>
+                        </div>
+
+                        <div class="list-group-item">
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    {{form_label(formContrat.type)}} {{form_widget(formContrat.type)}} {{form_errors(formContrat.type)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_label(formContrat.debut)}} {{form_widget(formContrat.debut)}} {{form_errors(formContrat.debut)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_label(formContrat.fin)}} {{form_widget(formContrat.fin)}} {{form_errors(formContrat.fin)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(formContrat)}}
+                                    <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Renouveler</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h3 class="text-center">Missions & Congés</h3>
+        <hr/>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-group">
+                        <div class="list-group-item bg-green">
+                            <h3>Congés</h3>
+                        </div>
+                        <div class="list-group-item">
+                            {% for conge in user.conges %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-conges" href="#collapse-conge-{{conge.id}}">Du {{conge.debutReadable()}}</a></h4>
+                                </div>
+                                <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse-conge-{{conge.id}}">
+                                    <div class="panel-body">
+                                        <div>Du {{conge.debutReadable()}} au {{conge.finReadable()}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <span>Aucun congé</span> {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_CONGE') %}
+                <div class="col-sm-6">
+                    <fieldset>
+                        <legend>
+                            <h4>Ajouter un congé</h4>
+                        </legend>
+                        <form action="" method="post">
+                            <div class="form-group">
+                                {{form_widget(formConge.debut)}} {{form_errors(formConge.debut)}}
+                            </div>
+                            <div class="form-group">
+                                {{form_widget(formConge.fin)}} {{form_errors(formConge.fin)}}
+                            </div>
+                            <div class="form-group">
+                                {{form_end(formConge)}}
+                                <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Ajouter</button>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-group">
+                        <div class="list-group-item bg-green">
+                            <h3>Missions</h3>
+                        </div>
+                        <div class="list-group-item">
+                            {% for mission in user.missions %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-missions" href="#collapse-mission-{{mission.id}}">{{mission.name}}</a></h4>
+                                </div>
+                                <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse-mission-{{mission.id}}">
+                                    <div class="panel-body">
+                                        <div>{{mission.description}}</div>
+                                        <div><small class="text-muted">A {{mission.place}}</small>&nbsp;<small class="text-muted pull-right">De {{mission.duration}} Jours</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span>Aucune mission</span> {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_MISSION') %}
+                    <div class="col-sm-6">
+                        <fieldset>
+                            <legend>
+                                <h4>Ajouter une mission</h4>
+                            </legend>
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    {{form_widget(formMission.name)}} {{form_errors(formMission.name)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formMission.description)}} {{form_errors(formMission.description)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formMission.place)}} {{form_errors(formMission.place)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formMission.duration)}} {{form_errors(formMission.duration)}}
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Ajouter</button> {{form_end(formMission)}}
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="text-center">Sanctions & Pénalités</h3>
+            <hr/>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="list-group">
+                            <div class="list-group-item bg-primary">
+                                <h3>Sanctions</h3>
+                            </div>
+                            <div class="list-group-item">
+                                {% for sanction in user.sanctions %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-sanctions" href="#collapse-sanction-{{sanction.id}}">{{sanction.title}}</a></h4>
+                                    </div>
+                                    <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse-sanction-{{sanction.id}}">
+                                        <div class="panel-body">
+                                            <h4>{{sanction.typeReadable}}</h4>
+                                            <div><small>Du {{sanction.debutReadable()}} au {{sanction.finReadable()}}</small></div>
+                                            <div><small><b>Pour</b><br/>{{sanction.content}}</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span>Aucune sanction</span> {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_SANCTION') %}
+                    <div class="col-sm-6">
+                        <fieldset>
+                            <legend>
+                                <h4>Ajouter une sanction</h4>
+                            </legend>
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    {{form_label(formSanction.type)}} {{form_widget(formSanction.type)}} {{form_errors(formSanction.type)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.content)}} {{form_errors(formSanction.content)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.debut)}} {{form_errors(formSanction.debut)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.fin)}} {{form_errors(formSanction.fin)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(formSanction)}}
+                                    <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Ajouter</button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="list-group">
+                            <div class="list-group-item bg-green">
+                                <h3>Pénalités</h3>
+                            </div>
+                            <div class="list-group-item">
+                                {% for penalite in user.penalites %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-penalites" href="#collapse-penalite-{{penalite.id}}">{{penalite.duration}} Jours</a></h4>
+                                    </div>
+                                    <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse-penalite-{{penalite.id}}">
+                                        <div class="panel-body">
+                                            <div>{{penalite.motif}}</div>
+                                            <div><small class="pull-right text-muted">{{penalite.date|date('d-m-Y')}}</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span>Aucune pénalité</span> {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ADD_PENALITE') %}
+                    <div class="col-sm-6">
+                        <fieldset>
+                            <legend>
+                                <h4>Ajouter une pénalité</h4>
+                            </legend>
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    {{form_widget(formPenalite.duration)}} {{form_errors(formPenalite.duration)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formPenalite.motif)}} {{form_errors(formPenalite.motif)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formPenalite.date)}} {{form_errors(formPenalite.date)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(formPenalite)}}
+                                    <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Ajouter</button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="text-center">Récapitulatif</h3>
+            <hr/>
+            <button class="btn btn-success pull-right printer" data-print="#recap"><i class="fa fa-print"> Imprimer</i></button>
+            <br/>
+            <div class="col-lg-12 box" id="recap">
+                <h3>{{user.longname}}
+                    <br/><small>Embauché le {{user.dateEmbaucheReadable()}}</small> {% if not user.userEchelons.isEmpty() %}
+                    <div class="">
+                        {% if user.firstEchelon().echelon is not null %}
+                        <small>Premier poste {{user.firstEchelon().echelon.poste.name}} &middot; {{user.firstEchelon().echelon.designation}}</small>
+                        <br/><small>Poste actuel {{user.lastEchelon().echelon.poste.name}} &middot; {{user.lastEchelon().echelon.designation}}</small> {% endif %}
+                    </div>
+                    {% endif %}
+                </h3>
+                <div class="col-sm-6">
+                    <h4>Congés</h4>
+                    <ul class="">
+                        {% for conge in user.conges %}
+                        <li>Du {{conge.debutReadable()}} au {{conge.finReadable()}}</li>
+                        {% endfor %}
+                        <li><b>{{congeMois.nombre}}</b> ce mois ({{congeMois.duree}} jours)</li>
+                        <li><b>{{congeAnnee.nombre}}</b> cette année ({{congeAnnee.duree}} jours)</li>
+                    </ul>
+                </div>
+                <div class="col-sm-6">
+                    <h4>Sanction</h4>
+                    <ul class="">
+                        {% for conge in user.sanctions %}
+                        <li><b>{{conge.typeReadable()}}</b> Du {{conge.debutReadable()}} au {{conge.finReadable()}}</li>
+                        {% endfor %}
+                        <li><b>{{user.congeCeMois().nombre}}</b> ce mois ({{user.congeCeMois().duree}} jours)</li>
+                        <li><b>{{user.congeCetteAnnee().nombre}}</b> cette année ({{user.congeCetteAnnee().duree}} jours)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

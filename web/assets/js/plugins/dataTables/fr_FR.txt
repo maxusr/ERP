@@ -1,0 +1,17 @@
+{
+	"processing": "En cours...",
+	"lengthMenu": "Afficher _MENU_ entrées",
+	"zeroRecords": "Désolé! Aucun résultat trouvé",
+	"info": "Affichage page _PAGE_ de _PAGES_",
+	"infoEmpty": "Réponse non disponible",
+	"infoFiltered": "(Filtrer pour _MAX_ valeurs)",
+	"infoPostFix": "",
+	"search": "Rechercher",
+	"url": "",
+	"paginate": {
+		"first":    "Premier",
+		"previous": "Précédent",
+		"next":     "Suivant",
+		"last":     "Dernier"
+	}
+}

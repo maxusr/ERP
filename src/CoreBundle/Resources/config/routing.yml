@@ -1,0 +1,35 @@
+core_homepage:
+    path:     /
+    defaults: { _controller: CoreBundle:App:index }
+
+core_login:
+    path:     /login
+    defaults: { _controller: CoreBundle:Security:login }
+
+core_check:
+    path:     /login_check
+    defaults: { _controller: CoreBundle:Security:check }
+
+core_logout:
+    path:     /logout
+    defaults: { _controller: CoreBundle:Security:logout }
+
+core_rappel_vu:
+    path:   /rappel/vu/{id}
+    defaults: { _controller: CoreBundle:App:rappelVu }
+
+core_note_vu:
+    path:   /note/vu/{id}
+    defaults: { _controller: CoreBundle:App:noteVu }
+
+core_dossier:
+    resource: "@CoreBundle/Resources/config/dossier/routing.yml"
+    prefix:   /dossier
+
+core_setting:
+    resource: "@CoreBundle/Resources/config/setting/routing.yml"
+    prefix:   /setting
+
+core_carriere:
+    resource: "@CoreBundle/Resources/config/carriere/routing.yml"
+    prefix:   /carrieres

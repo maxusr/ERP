@@ -1,0 +1,101 @@
+{% extends "base.html.twig" %} {% block stylesheets %} {{ parent() }} {% endblock %} {% block title %}{{ parent() }}{% endblock title %} {% block body %}
+
+<nav class="navbar navbar-static-top header">
+    <div class="wrapper">
+        <div class="nav nav-top navbar-default nav-background">
+            <div class="nav navbar-nav">
+                <p>
+                    <!--<img src="./assets/images/logo.png" alt="logo excellia sarl" />-->
+                    <!-- <div class="nav-header-1">Cabinet Excellia Sarl</div> -->
+                    <div class="nav-header-2">Gestion des Ressources Humaines</div>
+                </p>
+            </div>
+        </div>
+        <div class="nav-bottom col-lg-12" id="navbar-collapse-1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li title="Accueil" class="{% if app.request.attributes.get('_route') == 'core_homepage' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('core_homepage')}}" data-toggle="modal"><i class="fa fa-home fa-lg"></i></a></li>
+                        {#
+                        <li title="Vos détails" data-toggle="tooltip"><a href="#"><i class="fa fa-list"></i></a></li>
+                        #} {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SETTING') %}
+                        <li title="Tableau de bord" class="{% if app.request.attributes.get('_route') == 'core_setting_home' %}active{% endif %}" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i></a>
+
+                            <ul class="dropdown-menu">
+                                <div class="dropdown-header">Gérer</div>
+                                <li><a href="{{path('core_setting_manage', {'entity': 'service'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Services</a></li>
+                                <li><a href="{{path('core_setting_manage', {'entity': 'poste'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Postes</a></li>
+                                <li><a href="{{path('core_setting_manage', {'entity': 'echelon'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Echelons & Salaires</a></li>
+                                <li><a href="{{path('core_setting_manage', {'entity': 'competence'})}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Conditions</a></li>
+                                <li><a href="{{path('core_setting_home')}}" data-toggle="modal"><span class="fa fa-circle-o fa-fw"></span> Autres</a></li>
+                                <li class="divider"></li>
+                                <div class="dropdown-header">Afficher</div>
+                                <li><a href="{{path('core_setting_salaire')}}"><span class="fa fa-circle-o fa-fw"></span> Salaires net</a></li>
+                                <div class="dropdown-header">Profils recommandés</div>
+                                <li><a href="{{path('core_setting_profil', {'entity': 'service'})}}"><span class="fa fa-circle-o fa-fw"></span> Par service</a></li>
+                                <li><a href="{{path('core_setting_profil', {'entity': 'poste'})}}"><span class="fa fa-circle-o fa-fw"></span> Par poste</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        <li title="Vous" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    {{app.user.calling}}
+                                </li>
+                                <li><a href="#portfolioProfil" data-toggle="modal"><span class="fa fa-eye fa-fw"></span> Afficher</a></li>
+                                <li><a href="#" data-toggle="modal"><span class="fa fa-edit fa-fw"></span> Modifier</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('core_logout')}}"><span class="fa fa-sign-out fa-fw"></span> Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li title="Agenda" class="{% if app.request.attributes.get('_route') == 'core_homepage' %}active{% endif %}" rel="tooltip"><a href="{{path('core_homepage')}}">AGENDA</a></li>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_DOSSIER') %}
+                        <li class="
+                         {% if app.request.attributes.get('_route') == 'core_dossier_home' or app.request.attributes.get('_route') == 'core_dossier_insert' %}active{% endif %}" title="Dossier" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">DOSSIER</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('core_dossier_home')}}"><i class="fa fa-list fa-fw"></i> Tous les dossiers</a></li>
+                                <li><a href="{{path('core_dossier_insert')}}"><i class="fa fa-plus fa-fw"></i> Enregistrer un dossier</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('core_dossier_archives')}}"><i class="fa fa-archive fa-fw"></i> Archives</a></li>
+                            </ul>
+                        </li>
+                        {% endif %} {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_CARRIERE') %}
+                        <li class="
+                         {% if app.request.attributes.get('_route') == 'core_carriere_home' or app.request.attributes.get('_route') == 'core_carriere_insert' %}active{% endif %}" title="Carrières" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">CARRIERES</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('core_carriere_home')}}"><i class="fa fa-group fa-fw"></i> Tous les employés</a></li>
+                                {% if app.user.can('ADD_USER') %}
+                                <li><a href="{{path('core_carriere_insert')}}"><i class="fa fa-plus fa-fw"></i> Enregistrer un employé</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-circle-o fa-fw"></i> Congés</a></li>
+                                <li><a href="#"><i class="fa fa-circle-o fa-fw"></i> Sanctions</a></li>
+                            </ul>
+                        </li>
+                        {% endif %} {# {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SOLDE') %}
+                        <li title="Soldes" rel="tooltip"><a href="#">SOLDES</a></li>
+                        {% endif %} {% if app.user.can('ACCESS_MESSAGERIE') %}
+                        <li id="launch-discussion" data-number-url="#" title="Envoyer un message" data-toggle="tooltip"><a href="#" data-toggle="modal"><small class="notifier text-navy"></small> <i class="fa fa-comments-o fa-lg"></i></a></li>
+                        {% endif %} #}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="container" id="content">
+    {% block main %} {% endblock main %} {{ include('modals/primitive.html.twig', {}) }}
+</main>
+<footer>
+    <div class="col-lg-12">
+        <p class="text-center">Copyright &copy; 2016 EPAB Designed by Belinga Junior</p>
+    </div>
+</footer>
+<!-- /.login-box -->
+{% endblock body %}

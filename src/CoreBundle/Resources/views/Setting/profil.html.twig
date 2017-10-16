@@ -1,0 +1,34 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h3 class="text-center">Profils pour {{name|title}}</h3>
+    <hr/>
+    <div class="row" id="folders">
+        {% for entity in entities %}
+        <div class="col-lg-12">
+            <h4>{{entity.item.name}}</h4>
+            <div class="row">
+                {% for profil in entity.items %}
+                <div class="col-sm-4 col-md-3 col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5><b>{{profil.longname}}</b></h5> {% if profil.conditionOf() == 'user' %}
+                            <button class="btn btn-info btn-block">Employé</button> {% else %}
+                            <button class="btn btn-primary btn-block">Dossier</button> {% endif %} {% if profil.conditionOf() == 'user' %}
+                            <a href="{{path('core_carriere_one', {'id': profil.id})}}" class="btn btn-success btn-block">Ouvrir</a> {% else %}
+                            <a href="{{path('core_dossier_one', {'id': profil.dossier.id})}}" class="btn btn-success btn-block">Ouvrir</a> {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-lg-12">
+                    <div class="well well-lg">
+                        <p class="text-center">Aucun profil n'a pu être généré ou ne concorde pour l'instant!</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

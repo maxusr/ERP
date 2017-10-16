@@ -1,0 +1,77 @@
+{% extends "base.html.twig" %} {% block stylesheets %} {{ parent() }} {% endblock %} {% block title %}{{ parent() }}{% endblock title %} {% block body %}
+
+<nav class="navbar navbar-static-top header">
+    <div class="wrapper">
+        <div class="nav nav-top navbar-default nav-background">
+            <div class="nav navbar-nav">
+                <p>
+                    <!--<img src="./assets/images/logo.png" alt="logo excellia sarl" />-->
+                    <!-- <div class="nav-header-1">Cabinet Excellia Sarl</div> -->
+                    <div class="nav-header-2">Gestion Ecole</div>
+                </p>
+            </div>
+        </div>
+        <div class="nav-bottom col-lg-12" id="navbar-collapse-1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li title="Accueil" class="{% if app.request.attributes.get('_route') == 'school_homepage' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('school_homepage')}}" data-toggle="modal"><i class="fa fa-home fa-lg"></i></a></li>
+                        {#
+                        <li title="Vos détails" data-toggle="tooltip"><a href="#"><i class="fa fa-list"></i></a></li>
+                        #}
+                        <li title="Vous" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    {{app.user.calling}}
+                                </li>
+                                <li><a href="#portfolioProfil" data-toggle="modal"><span class="fa fa-eye fa-fw"></span> Afficher</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('core_logout')}}"><span class="fa fa-sign-out fa-fw"></span> Déconnexion</a></li>
+                            </ul>
+                        </li>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SETTING') %}
+                        <li title="Paramètres" class="{% if app.request.attributes.get('_route') == 'school_setting_manage' %}active{% endif %}" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i>&nbsp;Paramètres</a>
+
+                            <ul class="dropdown-menu">
+                                <div class="dropdown-header">Bibliothèque</div>
+                                <li><a href="{{path('school_setting_manage', {'entity': 'book'})}}"><span class="fa fa-circle-o fa-fw"></span> Livres & Documents</a></li>
+                                <div class="dropdown-header">Scolarité</div>
+                                <li><a href="{{path('school_setting_manage', {'entity': 'matter'})}}"><span class="fa fa-circle-o fa-fw"></span> Matière</a></li>
+                                <li><a href="{{path('school_setting_manage', {'entity': 'classroom'})}}"><span class="fa fa-circle-o fa-fw"></span> Salle de classe</a></li>
+                                <li><a href="{{path('school_setting_manage', {'entity': 'exam'})}}"><span class="fa fa-circle-o fa-fw"></span> CC & Examens</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('MANAGE_LIBRARY') %}
+                        <li title="Emprunt à la bibliothèque" class="{% if app.request.attributes.get('_route') == 'school_borrows' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('school_borrows')}}" data-toggle="modal">Emprunts</a></li>
+                        {% endif %} {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('MANAGE_SCOLARSHIP') %}
+                        <li class="{% if app.request.attributes.get('_route') in ['school_students','school_student_create', 'school_student'] %}active{% endif %}" title="Etudiants" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Etudiants</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('school_students')}}"><i class="fa fa-list fa-fw"></i> Tous les étudiants</a></li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">Gestion des étudiants</li>
+                                <li><a href="{{path('school_student_create')}}"><i class="fa fa-list fa-fw"></i> Ajouter un étudiant</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="container" id="content">
+    {% block main %} {% endblock main %} {{ include('modals/primitive.html.twig', {}) }}
+</main>
+<footer>
+    <div class="col-lg-12">
+        <p class="text-center">Copyright &copy; {{'now'|date('Y')}} EPAB Designed by Belinga Junior</p>
+    </div>
+</footer>
+<!-- /.login-box -->
+{% endblock body %}

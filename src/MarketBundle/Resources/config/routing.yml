@@ -1,0 +1,55 @@
+market_homepage:
+    path:     /
+    defaults: { _controller: MarketBundle:Default:index }
+
+market_statistics:
+    path:     /statistics
+    defaults: { _controller: MarketBundle:Default:statistics }
+
+market_commande_list:
+    path:     /commandes/liste
+    defaults: { _controller: MarketBundle:Default:commandes }
+
+market_sale_list:
+    path:     /sales/liste
+    defaults: { _controller: MarketBundle:Default:sales }
+
+market_commande_create:
+    path:     /commandes/create
+    defaults: { _controller: MarketBundle:Default:commandeEdit }
+
+market_commande_update:
+    path:     /commandes/update/{id}
+    defaults: { _controller: MarketBundle:Default:commandeEdit }
+
+market_commande:
+    path:     /commande/{id}
+    defaults: { _controller: MarketBundle:Default:commande }
+
+market_sale_create:
+    path:     /sales/create
+    defaults: { _controller: MarketBundle:Default:saleEdit }
+
+market_sale_update:
+    path:     /sales/update/{id}
+    defaults: { _controller: MarketBundle:Default:saleEdit }
+
+market_sale:
+    path:     /sale/{id}
+    defaults: { _controller: MarketBundle:Default:sale }
+
+market_setting:
+    path:     /setting
+    defaults: { _controller: MarketBundle:Manage:index }
+
+market_setting_manage:
+    path:     /setting/manage/{entity}
+    defaults: { _controller: MarketBundle:Manager:manage }
+
+market_setting_manage_update:
+    path:     /setting/manage/{entity}/{id}
+    defaults: { _controller: MarketBundle:Manager:manage }
+
+market_setting_delete:
+    path:     /setting/delete/{type}/{id}
+    defaults: { _controller: MarketBundle:Manager:delete }

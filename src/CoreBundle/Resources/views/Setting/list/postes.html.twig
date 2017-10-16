@@ -1,0 +1,23 @@
+<ul class="list-group">
+    {% for entity in entities %}
+    <li class="list-group-item">
+        <h4 class="list-group-item-title">{{entity.name}}</h4>
+        <div class="pull-right">
+            <div class="btn btn-group">
+                <small class="btn btn-primary btn-sm">{{entity.echelons|length}} Echelons associés</small>
+                <span class="dropdown-toggle btn btn-primary btn-sm btn-addon" data-toggle="dropdown"><i class="fa fa-list"></i></span>
+                <ul class="dropdown-menu">
+                    {% for echelon in entity.echelons %}
+                    <li><a>{{echelon.designation}}</a></li>
+                    {% else %}
+                    <li><a>Aucun échelon</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <a href="{{path('core_setting_manage_update', {'id': entity.id, 'entity': 'poste'})}}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Modifier</a>
+            <a href="{{path('core_setting_delete', {'id': entity.id, 'type': 'poste'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm btn btn-sm btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    {% endfor %}
+</ul>

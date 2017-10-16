@@ -1,0 +1,87 @@
+{% extends "MarketBundle:App:base.html.twig" %} 
+{% block title %} Enregistrement commande | {{ parent() }}{% endblock %} 
+{% block main %}
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Enregistrement d'une commande</h2>
+            </div>
+            <div class="col-lg-12">
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-lg-6">
+                        {{ form_row(form.reference) }}
+                        {{ form_row(form.client) }}
+                        {{ form_row(form.observation) }}
+                    </div>
+                    <div class="col-lg-6">
+                        {{ form_row(form.billingMode) }}
+                        {{ form_row(form.shippingMode) }}
+                        {{ form_row(form.shippingCost) }}
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {{ form_label(form.items) }}
+                            </div>
+                            <div class="col-lg-12"  id="prototype_item" data-prototype="{{ form_widget(form.items.vars.prototype)|e }}">
+                                {% for item in form.items %}
+                                    <div class="well well-lg">
+                                        {{ form_row(item) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-lg-12">
+                                <a href="#" class="btn btn-success btn-block" id="add_item">Ajouter un produit</a>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-lg-12">
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        // keep track of how many email fields have been rendered
+        var itemCount = '{{ form.items|length }}';
+
+        jQuery(document).ready(function() {
+            jQuery('#add_item').click(function(e) {
+                e.preventDefault();
+
+                var itemList = jQuery('#prototype_item');
+
+                // grab the prototype template
+                var newWidget = itemList.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, itemCount);
+                itemCount++;
+
+                // create a new list element and add it to the list
+                var newDiv = jQuery('<div class="well well-lg"></div>').html(newWidget);
+                newDiv.appendTo(itemList);
+                addTagFormDeleteLink(newDiv);
+            });
+
+            function addTagFormDeleteLink($tagFormDiv) {
+                var $removeFormA = $('<a class="btn btn-danger pull-right" href="#">Supprimer</a>');
+                $tagFormDiv.append($removeFormA);
+                $tagFormDiv.append(jQuery('<div class="clearfix"></div>'));
+
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the div for the tag form
+                    $tagFormDiv.remove();
+                    itemCount--;
+                });
+            }
+        });
+    </script>
+{% endblock javascripts %}

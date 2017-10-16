@@ -1,0 +1,260 @@
+{% extends "SchoolBundle:App:base.html.twig" %} {% block title %} {{student.longname}} | {{ parent() }}{% endblock %} {% block main %}
+<div class="col-lg-12">
+    <h2>
+        <i class="fa fa-user"></i> {{student.longname}}
+        <span class="pull-right">
+            {% if student.email is not null %}
+			<a href="mailto:{{student.email}}" class="btn bg-blue"><i class="fa fa-envelope-o"></i> Envoyer un mail</a>
+            {% endif %}
+            {% if app.user.can('MANAGE_SCOLARSHIP') %}
+			<a href="{{path('school_setting_delete', {'id': student.id, 'entity': 'student'})}}" data-confirm-message="Voulez-vous vraiment supprimer cet étudiant?" class="confirm btn btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+            {% endif %}
+		</span>
+    </h2>
+    <hr/>
+    <div class="row">
+        <div class="col-md-4 col-sm-5">
+            <div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="{{asset('assets/images/banner.jpg')}}" />
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="{{student.photo is defined and student.photo is not null ? asset(student.photo.getWebPath()) : asset('assets/images/logo2.png')}}" />
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <a href="{{path('school_student', {'id': student.id})}}">
+                                    <h3 class="name">{{student.longname}}</h3> {% if student.currentClassroom is not null %}
+                                    <p class="profession">{{student.currentClassroom.name}}</p>{% endif %}
+                                </a>
+                                <h5>Informations</h5>
+                                <h5><small>Né le {{student.birthday ? student.birthday|date("d/m/Y"): 'Non défini'}}</small></h5>
+                                <h5><small>Matricule: {{student.matricule ? student.matricule : 'Non défini'}}</small></h5>
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple" onclick="rotateCard(this)">
+                                            <i class="fa fa-mail-forward"></i> Plus d'informations'
+                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h4 class="motto">Plus sur {{student.longname}}</h4>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4>Nationalité</h4>
+                                <p>{{student.nationality}}</p>
+                                <h4>Contact</h4>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-envelope-o fa-fw"></i>&nbsp;{{student.email}}</li>
+                                    <li><i class="fa fa-phone fa-fw"></i>&nbsp;{{student.telephone}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-simple" rel="tooltip" title="Retour" onclick="rotateCard(this)">
+                                        <i class="fa fa-reply"></i> Retour
+                                    </button>
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        <div class="col-md-8 col-sm-7">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="list-group">
+                        <div class="list-group-item bg-blue">
+                            <h3>Classe Actuelle<br/><small>{% if student.currentClassroom is not null %}{{student.currentClassroom.name}}{% else %}Aucune salle de classe{% endif %}</small></h3>
+                        </div>
+
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('MANAGE_SCOLARSHIP') %}
+                        <div class="list-group-item">
+                            <fieldset>
+                                <legend>
+                                    <h4>Nouvelle salle?</h4>
+                                </legend>
+                                {{form(formStudentNewClassroom)}}
+                            </fieldset>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h3>Dernières classes</h3>
+                    <div class="list-group">
+                        {% for classroom in student.classrooms %}
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-title">
+                                <b>{{classroom.name}}</b><br/>
+                            </h5>
+                        </div>
+                        {% else %}
+                        <div class="list-group-item">
+                            <h5 class="list-group-item-title">
+                                Aucune pour l'instant
+                            </h5>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row">
+            <h3 class="text-center">Sanctions</h3>
+            <hr/>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="list-group">
+                            <div class="list-group-item bg-primary">
+                                <h3>Sanctions</h3>
+                            </div>
+                            <div class="list-group-item">
+                                {% for sanction in student.sanctions %}
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title"><a data-toggle="collapse" data-parent="accordion-sanctions" href="#collapse-sanction-{{sanction.id}}">{{sanction.typeReadable()}}</a></h4>
+                                    </div>
+                                    <div class="panel-collapse collapse {% if loop.first %}in{% endif %}" id="collapse-sanction-{{sanction.id}}">
+                                        <div class="panel-body">
+                                            <div><small>A Partir du {{sanction.debutReadable()}} Pour {{sanction.duration}} Jours</small></div>
+                                            <div><small><b>Cause:</b><br/>{{sanction.description}}</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span>Aucune sanction</span> {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('MANAGE_SCOLARSHIP') %}
+                    <div class="col-sm-4">
+                        <fieldset>
+                            <legend>
+                                <h4>Ajouter une sanction</h4>
+                            </legend>
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    {{form_label(formSanction.type)}} {{form_widget(formSanction.type)}} {{form_errors(formSanction.type)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.description)}} {{form_errors(formSanction.description)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.madeAt)}} {{form_errors(formSanction.madeAt)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(formSanction.duration)}} {{form_errors(formSanction.duration)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(formSanction)}}
+                                    <button class="btn bg-green btn-block"><i class="fa fa-plus"></i> Ajouter</button>
+                                </div>
+                            </form>
+                        </fieldset>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="text-center">Notes</h3>
+            <hr/>
+            <button class="btn btn-success pull-right printer" data-print="#recap"><i class="fa fa-print"> Imprimer</i></button>
+            <br/>
+            <div class="col-md-4">
+                <h4>Ajouter une note</h4>
+                {{form(formNote)}}
+            </div>
+            <div class="col-md-8 box" id="recap">
+                <table class="table table-stripered table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Matière</th>
+                            <th>Note</th>
+                            <th>Examen</th>
+                            <th>Classe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in student.notes %}
+                        <tr>
+                            <td>{{note.matter.name}}</td>
+                            <td>{{note.note}}</td>
+                            <td>{{note.exam.name}}</td>
+                            <td>{{note.studentClassroom ? note.studentClassroom.name : 'Non défini'}}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td class="text-center" colspan="5">Aucune note</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <h3 class="text-center">Bulletins</h3>
+            <hr/>
+            <div class="col-md-4">
+                <h4>Ajouter une bulletin</h4>
+                {{form(formBulletin)}}
+            </div>
+            <div class="col-md-8 box">
+                {% for bulletin in student.bulletins %}
+                <div id="bulletin-{{bulletin.id}}" class="col-lg-12">
+                    <button class="btn btn-success pull-right printer" data-print="#bulletin-{{bulletin.id}}"><i class="fa fa-print"> Imprimer</i></button>
+                    <br/>
+                    <h4>{{student.longname}}<br/><small>{{bulletin.period}}</small></h4>
+                    <table class="table table-stripered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Matière</th>
+                                <th>Note</th>
+                                <th>Coefficient</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for note in bulletin.notes %}
+                            <tr>
+                                <td>{{note.matter.name}}</td>
+                                <td>{{note.note}}</td>
+                                <td>{{note.matter.coefficient}}</td>
+                                <td>{{note.total}}</td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <th colspan="2">
+                                    <h4>Totaux</h4>
+                                </th>
+                                <th>{{bulletin.coefficients}}</th>
+                                <th>{{bulletin.marks}}</th>
+                            </tr>
+                            <tr>
+                                <th colspan="2">
+                                    <h3>Moyenne</h3>
+                                </th>
+                                <th colspan="2" class="text-center">
+                                    <h3><em>{{bulletin.average}}</em></h3>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}

@@ -1,0 +1,14 @@
+<ul class="list-group">
+    {% for entity in entities %}
+    <li class="list-group-item">
+        <h4 class="list-group-item-title">{{entity.name}}
+            <br/><small>{{entity.coefficient ? 'Coef: '~entity.coefficient : ''}}</small>
+        </h4>
+        <div class="pull-right">
+            <a href="{{path('school_setting_manage_update', {'id': entity.id, 'entity': 'matter'})}}" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i> Modifier</a>
+            <a href="{{path('school_setting_delete', {'id': entity.id, 'entity': 'matter'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm btn btn-sm btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+        </div>
+        <div class="clearfix"></div>
+    </li>
+    {% endfor %}
+</ul>

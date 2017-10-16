@@ -1,0 +1,107 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <br/>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>Gestion des Régions</h4>
+                </div>
+                <div class="panel-body">
+                    <form method="POST">
+                        <div class="form-group">
+                            {{form_widget(regionForm.name)}} {{form_errors(regionForm.name)}}
+                        </div>
+                        <div class="form-group">
+                            {{form_end(regionForm)}}
+                            <button type="submit" class="btn btn-success">Enregistrer</button>
+                        </div>
+                    </form>
+                    <hr/>
+                    <ul class="list-group">
+                        {% for region in regions %}
+                        <li class="list-group-item">
+                            <a href="{{path('core_setting_delete', {'id': region.id, 'type': 'region'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm pull-right"><i class="fa fa-remove"></i></a>
+                            <span>{{region.name}}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>Gestion des Domaines</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form method="POST">
+                                <div class="form-group">
+                                    {{form_widget(domaineForm.name)}} {{form_errors(domaineForm.name)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(domaineForm.competence)}} {{form_errors(domaineForm.competence)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(domaineForm.description)}} {{form_errors(domaineForm.description)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(domaineForm)}}
+                                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-12">
+                            <ul class="list-group">
+                                {% for domaine in domaines %}
+                                <li class="list-group-item">
+                                    <a href="{{path('core_setting_delete', {'id': domaine.id, 'type': 'domaine'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm pull-right"><i class="fa fa-remove"></i></a>
+                                    <span>{{domaine.name}}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4>Gestion des Taxes</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form method="POST">
+                                <div class="form-group">
+                                    {{form_widget(taxeForm.name)}} {{form_errors(taxeForm.name)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_widget(taxeForm.percent)}} {{form_errors(taxeForm.percent)}}
+                                </div>
+                                <div class="form-group">
+                                    {{form_end(taxeForm)}}
+                                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-12">
+                            <ul class="list-group">
+                                {% for taxe in taxes %}
+                                <li class="list-group-item">
+                                    <a href="{{path('core_setting_delete', {'id': taxe.id, 'type': 'taxe'})}}" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" class="confirm pull-right"><i class="fa fa-remove"></i></a>
+                                    <span>{{taxe.name}}&nbsp;&middot;&nbsp;<small class="text-muted">{{taxe.percent}}%</small></span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

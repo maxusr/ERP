@@ -1,0 +1,80 @@
+{% extends "MarketBundle:App:base.html.twig" %} 
+{% block title %} Accueil | {{ parent() }}{% endblock %} 
+{% block main %}
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Liste Commandes</h2>
+            </div>
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th data-attribute="reference">Référence</th>
+                                <th data-attribute="client">Client</th>
+                                <th data-attribute="observation">Observation</th>
+                                <th data-attribute="nombre">Nombre Produit</th>
+                                <th data-attribute="total">Total</th>
+                                <th data-attribute="date">Date</th>
+                                <th data-attribute="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for commande in commandes %}
+                            <tr>
+                                <td>{{commande.reference}}</td>
+                                <td>{{commande.client.name}}</td>
+                                <td>{{commande.observation}}</td>
+                                <td>{{commande.numberProduct}}</td>
+                                <td>{{commande.total}}</td>
+                                <td>{{commande.date|date("d/m/Y")}}</td>
+                                <td>
+                                    <a href="{{path('market_commande', {id: commande.id})}}" class="btn btn-info" >Afficher</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Liste des Ventes</h2>
+            </div>
+            <div class="col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th data-attribute="reference">Total</th>
+                                <th data-attribute="reference">Taxe</th>
+                                <th data-attribute="total">Total TTC</th>
+                                <th data-attribute="total">Reçu</th>
+                                <th data-attribute="date">Date</th>
+                                <th data-attribute="actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                            <tr>
+                                <td>{{sale.total}}</td>
+                                <td>{{sale.taxe}}</td>
+                                <td>{{sale.totalTTC}}</td>
+                                <td>{{sale.receive}}</td>
+                                <td>{{sale.date|date("d/m/Y")}}</td>
+                                <td>
+                                    <a href="{{path('market_sale', {id: sale.id})}}" class="btn btn-info" >Afficher</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

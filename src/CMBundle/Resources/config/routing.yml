@@ -1,0 +1,35 @@
+cm_homepage:
+    path:     /
+    defaults: { _controller: CMBundle:Default:index }
+
+cm_all:
+    path:     /all/{entity}
+    defaults: { _controller: CMBundle:Default:all }
+
+cm_setting:
+    path:     /setting
+    defaults: { _controller: CMBundle:Manage:index }
+
+cm_setting_manage:
+    path:     /setting/manage/{entity}
+    defaults: { _controller: CMBundle:Manager:manage }
+
+cm_setting_manage_update:
+    path:     /setting/manage/{entity}/{id}
+    defaults: { _controller: CMBundle:Manager:manage }
+
+cm_setting_delete:
+    path:     /setting/delete/{type}/{id}
+    defaults: { _controller: CMBundle:Manager:delete }
+
+cm_product_states:
+    path:     /states
+    defaults: { _controller: CMBundle:Default:states }
+
+cm_product_inventaire:
+    path:     /inventaire
+    defaults: { _controller: CMBundle:Default:inventaire }
+
+cm_product_consommable:
+    path:     /consommables
+    defaults: { _controller: CMBundle:Default:consommable }

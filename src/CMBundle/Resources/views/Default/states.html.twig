@@ -1,0 +1,59 @@
+{% extends "CMBundle:App:base.html.twig" %} {% block title %} {{name}} | {{ parent() }} {% endblock title %} {% block main %}
+<div class="col-md-3">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Ajouter un {{name}}</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            {{form(formState)}}
+        </div>
+    </div>
+</div>
+<div class="col-md-9">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>{{name}}s</h1>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        {% for entity in entities %}
+        <div class="col-md-4">
+            <div class="card-container manual-flip">
+                <div class="card card-sm">
+                    <div class="front">
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">{{ entity.product.name }}</h3>
+                                <p class="profession">Reférence: {{ entity.product.reference ? entity.product.reference : 'Non fournie' }}</p>
+                                <h3 class="profession"><strong>Etat: {{ entity.description }}</strong></h3>
+                                <h4>Note</h4>
+                                <h4><small>{{ entity.note ? entity.note : 'Aucune note fournie' }}</small></h4>
+                            </div>
+                            {% if entity.insertedBy.isEqualTo(app.user) %}
+                            <div class="footer">
+                                <span class="btn btn-simple">Le {{entity.insertedAt|date('d-m-Y à H:i:s')}}</span>
+                                <a href="{{path('cm_setting_delete', {'id': entity.id, 'type': 'state'})}}" class="btn btn-simple confirm" data-confirm-message="Voulez-vous vraiment supprimer cette entité?" rel="tooltip" title="Supprimer">
+                                            Supprimer <i class="fa fa-remove"></i>
+                                        </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end card-container -->
+        </div>
+        {% else %}
+        <div class="well">
+            <p class="text-center">Aucun {{name}} enregistré</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

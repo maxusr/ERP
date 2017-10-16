@@ -1,0 +1,85 @@
+{% extends "MarketBundle:App:base.html.twig" %} 
+{% block title %} Commande {{commande.reference}} | {{ parent() }}{% endblock %} 
+{% block main %}
+<div class="col-lg-12">
+    <h2>
+        <span class="pull-right">
+			<a href="{{path('market_commande_update', {'id': commande.id})}}" class="btn btn-success">Modifier</a>
+			<a href="{{path('market_setting_delete', {'id': commande.id, 'type': 'commande'})}}" data-confirm-message="Voulez vous vraiment supprimer cette commande?" class="btn btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+		</span>
+    </h2>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="list-group">
+                        <div class="list-group-item bg-blue">
+                            <h3>Reférence
+                                <br/><small>{{commande.reference}}</small>
+                            </h3>
+                        </div>
+                        <div class="list-group-item">
+                            <h3>Client
+                                <br/><small>{{commande.client.name}}</small>
+                                <br/><small>{{commande.client.telephone}}</small>
+                                <br/><small>{{commande.client.email}}</small>
+                            </h3>
+                        </div>
+                        <div class="list-group-item">
+                            <h3>Total
+                                <br/><small>{{commande.total}} FCFA</small>
+                            </h3>
+                        </div>
+                        <div class="list-group-item">
+                            <h3>Observation
+                                <br/><small>{{commande.observation}}</small>
+                            </h3>
+                        </div>
+                        <div class="list-group-item">
+                            <h3>Paiement
+                                <br/><small>{{commande.billingMode}}</small>
+                            </h3>
+                        </div>
+                        <div class="list-group-item">
+                            <h3>Livraison
+                                <br/><small>{{commande.shippingMode}}</small>
+                                <br/><small>{{commande.shippingCost}} FCFA</small>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <h3>Produits</h3>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th data-attribute="reference">Nom</th>
+                                    <th data-attribute="client">Prix Unitaire (FCFA)</th>
+                                    <th data-attribute="nombre">Quantité</th>
+                                    <th data-attribute="total">Total (FCFA)</th>
+                                    <th data-attribute="actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>{{item.product.name}}</td>
+                                    <td>{{item.product.price}}</td>
+                                    <td>{{item.quantity}}</td>
+                                    <td>{{item.product.price * item.quantity}}</td>
+                                    <td>
+                                        <a href="{{path('market_setting_delete', {'id': item.id, 'type': 'commandeItem'})}}" data-confirm-message="Voulez vous vraiment supprimer cette produit?" class="btn btn-danger"><i class="fa fa-remove"></i> Supprimer</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

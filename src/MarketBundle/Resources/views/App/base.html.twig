@@ -1,0 +1,103 @@
+{% extends "base.html.twig" %} {% block stylesheets %} {{ parent() }} {% endblock %} {% block title %}{{ parent() }}{% endblock title %} {% block body %}
+
+<nav class="navbar navbar-static-top header">
+    <div class="wrapper">
+        <div class="nav nav-top navbar-default nav-background">
+            <div class="nav navbar-nav">
+                <p>
+                    <!--<img src="./assets/images/logo.png" alt="logo excellia sarl" />-->
+                    <!-- <div class="nav-header-1">Cabinet Excellia Sarl</div> -->
+                    <div class="nav-header-2">Gestion des Marchés</div>
+                </p>
+            </div>
+        </div>
+        <div class="nav-bottom col-lg-12" id="navbar-collapse-1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li title="Accueil" class="{% if app.request.attributes.get('_route') == 'market_homepage' %}active{% endif %}" data-toggle="tooltip"><a href="{{path('market_homepage')}}" data-toggle="modal"><i class="fa fa-home fa-lg"></i></a></li>
+                        {#
+                        <li title="Vos détails" data-toggle="tooltip"><a href="#"><i class="fa fa-list"></i></a></li>
+                        #}
+                        <li title="Vous" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    {{app.user.calling}}
+                                </li>
+                                <li><a href="#portfolioProfil" data-toggle="modal"><span class="fa fa-eye fa-fw"></span> Afficher</a></li>
+                                <li class="divider"></li>
+                                <li class="dropdown-header">
+                                    Vos Accès
+                                </li>
+                                {% if app.user.can('ACCESS_MARKET') %}
+                                <li><a href="{{path('market_homepage')}}"><span class="fa fa-circle fa-fw"></span> Gestion Marchés</a></li>
+                                {% endif %}
+                                {% if app.user.can('ACCESS_SCHOOL') %}
+                                <li><a href="{{path('school_homepage')}}"><span class="fa fa-circle fa-fw"></span> Gestion Ecole</a></li>
+                                {% endif %}
+                                {% if app.user.can('ACCESS_CM') %}
+                                <li><a href="{{path('cm_homepage')}}"><span class="fa fa-circle fa-fw"></span> Comptabilité Matière</a></li>
+                                {% endif %}
+                                {% if app.user.can('ACCESS_RH') %}
+                                <li><a href="{{path('core_homepage')}}"><span class="fa fa-circle fa-fw"></span> Gestion Ressources Humaines</a></li>
+                                {% endif %}
+                                <li class="divider"></li>
+                                <li><a href="{{path('core_logout')}}"><span class="fa fa-sign-out fa-fw"></span> Déconnexion</a></li>
+                            </ul>
+                        </li>
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SETTING') %}
+                        <li title="Patrimoine" class="{% if app.request.attributes.get('_route') == 'cm_setting' %}active{% endif %}" data-toggle="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-dashboard"></i>&nbsp;Patrimoine</a>
+
+                            <ul class="dropdown-menu">
+                                <div class="dropdown-header">Gérer</div>
+                                <li><a href="{{path('market_setting_manage', {'entity': 'client'})}}" ><span class="fa fa-circle-o fa-fw"></span> Client</a></li>
+                                <li><a href="{{path('market_setting_manage', {'entity': 'productAttribute'})}}" ><span class="fa fa-circle-o fa-fw"></span> Attributs de Produit</a></li>
+                                <li><a href="{{path('market_setting_manage', {'entity': 'productVariant'})}}" ><span class="fa fa-circle-o fa-fw"></span> Variantes de Produit</a></li>
+                                <li><a href="{{path('market_setting_manage', {'entity': 'product'})}}" ><span class="fa fa-circle-o fa-fw"></span> Produits</a></li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="{% if app.request.attributes.get('_route') == 'market_statistics' %}active{% endif %}" title="Statistiques" rel="tooltip">
+                            <a href="{{path('market_statistics')}}" >Statistiques</a>
+                        </li>
+                        <li class="{% if app.request.attributes.get('_route') == 'market_commande' or app.request.attributes.get('_route') == 'market_commande_list' or app.request.attributes.get('_route') == 'market_commande_create' %}active{% endif %}" title="Commandes" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Commandes</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('market_commande_list')}}"><i class="fa fa-list fa-fw"></i> Liste commandes</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('market_commande_create')}}"><i class="fa fa-edit fa-fw"></i> Ajouter commande</a></li>
+                            </ul>
+                        </li>
+                        <li class="{% if app.request.attributes.get('_route') == 'market_sale' or app.request.attributes.get('_route') == 'market_sale_list' or app.request.attributes.get('_route') == 'market_sale_create' %}active{% endif %}" title="Ventes" rel="tooltip">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ventes</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{path('market_sale_list')}}"><i class="fa fa-list fa-fw"></i> Liste ventes</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{path('market_sale_create')}}"><i class="fa fa-edit fa-fw"></i> Entrer vente</a></li>
+                            </ul>
+                        </li>
+                        {# {% if is_granted('IS_AUTHENTICATED_REMEMBERED') and app.user.can('ACCESS_SOLDE') %}
+                        <li title="Soldes" rel="tooltip"><a href="#">SOLDES</a></li>
+                        {% endif %} {% if app.user.can('ACCESS_MESSAGERIE') %}
+                        <li id="launch-discussion" data-number-url="#" title="Envoyer un message" data-toggle="tooltip"><a href="#" data-toggle="modal"><small class="notifier text-navy"></small> <i class="fa fa-comments-o fa-lg"></i></a></li>
+                        {% endif %} #}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="container" id="content">
+    {% block main %} {% endblock main %} {{ include('modals/primitive.html.twig', {}) }}
+</main>
+<footer>
+    <div class="col-lg-12">
+        <p class="text-center">Copyright &copy; 2016 EPAB Designed by Belinga Junior</p>
+    </div>
+</footer>
+<!-- /.login-box -->
+{% endblock body %}

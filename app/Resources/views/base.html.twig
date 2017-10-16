@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="fr">
+    <meta charset="UTF-8" />
+    <title>{% block title %}EPAB{% endblock %}</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/bootstrap/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/font-awesome/css/font-awesome.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/datepicker/datepicker.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/rotating-card.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/colors.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/discussion.css') }}" />
+
+    <link rel="stylesheet" href="{{ asset('assets/css/docs.css') }}" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+
+<body>
+    {% block body %}{% endblock %}
+    <!-- jQuery -->
+    <script src="{{ asset('assets/js/plugins/jquery/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/plugins/jquery/jquery.form.js') }}" type="text/javascript"></script>
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('assets/js/plugins/bootstrap/bootstrap.min.js') }}" type="text/javascript"></script>
+    <!-- Other Plugin JS -->
+    <script src="{{ asset('assets/js/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/plugins/datepicker/locales/bootstrap-datepicker.fr.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/plugins/input-mask/jquery.inputmask.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/plugins/input-mask/jquery.inputmask.date.extensions.js') }}" type="text/javascript"></script>
+    {% block javascripts %}{% endblock %}
+
+    <script src="http://localhost:3000/socket.io/socket.io.js" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/discussion.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/docs.js') }}" type="text/javascript"></script>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+    <script>
+        var timerID = null;
+        function stopWaiting() {
+            if(timerID)
+                window.clearTimeout(timerID);
+            wait();
+        }
+
+        function wait() {
+            timerID = window.setTimeout(function(){
+                window.location.href = "{{path('core_logout', {'timeout': 600})}}";
+            }, 600000);
+        }
+
+        $(window).on('mousemove', function(){
+            stopWaiting();
+        });
+        $(window).on('keydown', function(){
+            stopWaiting();
+        });
+        $('[data-toggle="popover"]').popover();
+
+    </script>
+    {% endif %}
+    {% if app.session.flashbag.has('danger') or app.session.flashbag.has('info') or app.session.flashbag.has('warning') %}
+    <div class="col-lg-12 alert-fixed">
+        {% for type, messages in app.session.flashbag.all() %}
+        <div class="alert alert-{{type}} alert-dismissable">
+            <button class="close" data-dismiss="alert">&times;</button>
+            <ol>
+                {% for message in messages %}
+                <li>{{message}}</li>
+                {% endfor %}
+            </ol>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+
+</html>

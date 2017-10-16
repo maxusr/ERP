@@ -1,0 +1,88 @@
+{% extends "core/base.html.twig" %} {% block main %}
+<div class="col-lg-12">
+    <h2>Enregistrer un nouvel employé</h2>
+    <hr/>
+    <form class="form text-left" method="post" action="" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        {{form_label(formUser.civility)}} {{form_widget(formUser.civility)}} {{form_errors(formUser.civility)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.name)}} {{form_errors(formUser.name)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.surname)}} {{form_errors(formUser.surname)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.telephone)}} {{form_errors(formUser.telephone)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_label(formUser.identifiantType)}} {{form_widget(formUser.identifiantType)}} {{form_errors(formUser.identifiantType)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.identifiant)}} {{form_errors(formUser.identifiant)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.email)}} {{form_errors(formUser.email)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.password.first)}} {{form_errors(formUser.password.first)}}
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.password.second)}} {{form_errors(formUser.password.second)}}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{form_label(formUser.photo)}}
+                        <img src="{{asset(user.photo.getWebPath())}}" id="image-uploaded" />
+                        <hr/>
+                        <div class="col-lg-12">
+                            <button class="btn btn-primary btn-sm btn-block" id="film-vignette-hidder"><i class="fa fa-file-image-o"></i></button> {{form_widget(formUser.photo)}} {{form_errors(formUser.photo)}}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        {{form_widget(formUser.contrat)}} {{form_errors(formUser.contrat)}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {{form_label(formUser.regionOrigine)}} {{form_widget(formUser.regionOrigine)}} {{form_errors(formUser.regionOrigine)}}
+                </div>
+                <div class="form-group">
+                    {{form_widget(formUser.dateNaissance)}} {{form_errors(formUser.dateNaissance)}}
+                </div>
+                <div class="form-group">
+                    {{form_widget(formUser.lieuNaissance)}} {{form_errors(formUser.lieuNaissance)}}
+                </div>
+                <div class="form-group">
+                    {{form_widget(formUser.domicile)}} {{form_errors(formUser.domicile)}}
+                </div>
+                <div class="form-group">
+                    {{form_widget(formUser.competence)}} {{form_errors(formUser.competence)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formUser.dateEmbauche)}} {{form_widget(formUser.dateEmbauche)}} {{form_errors(formUser.dateEmbauche)}}
+                </div>
+                <div class="form-group">
+                    {{form_label(formUser.domaine)}} {{form_widget(formUser.domaine)}} {{form_errors(formUser.domaine)}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="clearfix"></div>
+            <div class="form-group col-lg-12">
+                {{form_end(formUser)}}
+                <button class="btn btn-success btn-lg" type="submit"><i class="fa fa-user"></i> Ajouter</button>
+            </div>
+        </div>
+    </form>
+    <div class="clearfix"></div>
+</div>
+{% endblock %} {% block javascripts %} {{parent()}}
+<script src="{{ asset('assets/js/add.user.js') }}" type="text/javascript"></script>
+{% endblock %}

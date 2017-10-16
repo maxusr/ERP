@@ -1,0 +1,20 @@
+market:
+    resource: "@MarketBundle/Resources/config/routing.yml"
+    prefix:   /market
+
+school:
+    resource: "@SchoolBundle/Resources/config/routing.yml"
+    prefix:   /school
+
+cm:
+    resource: "@CMBundle/Resources/config/routing.yml"
+    prefix:   /cm
+
+core:
+    resource: "@CoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+# app:
+  #   resource: "@AppBundle/Controller/"
+    # type:     annotation
